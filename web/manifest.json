@@ -1,6 +1,6 @@
 {
-    "name": "ingat_obat",
-    "short_name": "ingat_obat",
+    "name": "ingat_obatku",
+    "short_name": "ingat_obatku",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

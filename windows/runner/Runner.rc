@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "ingat_obat" "\0"
+            VALUE "FileDescription", "ingat_obatku" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "ingat_obat" "\0"
+            VALUE "InternalName", "ingat_obatku" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "ingat_obat.exe" "\0"
-            VALUE "ProductName", "ingat_obat" "\0"
+            VALUE "OriginalFilename", "ingat_obatku.exe" "\0"
+            VALUE "ProductName", "ingat_obatku" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

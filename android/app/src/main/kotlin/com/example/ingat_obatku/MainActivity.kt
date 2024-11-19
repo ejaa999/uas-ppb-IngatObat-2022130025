@@ -1,4 +1,4 @@
-package com.example.ingat_obat
+package com.example.ingat_obatku
 
 import io.flutter.embedding.android.FlutterActivity
 
