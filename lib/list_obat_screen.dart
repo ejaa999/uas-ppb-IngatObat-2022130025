@@ -1,22 +1,141 @@
 import 'package:flutter/material.dart';
 
-class ListObatScreen extends StatelessWidget {
+class ListObatScreen extends StatefulWidget {
   const ListObatScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // Dummy data obat (sementara, nanti diganti dengan data dari Firebase)
-    final List<Map<String, String>> obatList = [
-      {'name': 'Paracetamol', 'schedule': 'Pagi & Malam'},
-      {'name': 'Vitamin C', 'schedule': 'Setelah Sarapan'},
-      {'name': 'Amoxicillin', 'schedule': 'Setiap 8 Jam'},
-    ];
+  _ListObatScreenState createState() => _ListObatScreenState();
+}
 
+class _ListObatScreenState extends State<ListObatScreen> {
+  // List data obat
+  final List<Map<String, String>> _obatList = [
+    {'name': 'Paracetamol', 'schedule': '6 jam sekali'},
+    {'name': 'Vitamin C', 'schedule': '12 jam sekali'},
+    {'name': 'Amoxicillin', 'schedule': '8 jam sekali'},
+  ];
+
+  // Fungsi untuk menambahkan obat
+  void _addObat(String name, String schedule) {
+    setState(() {
+      _obatList.add({'name': name, 'schedule': schedule});
+    });
+  }
+
+  // Fungsi untuk menghapus obat
+  void _deleteObat(int index) {
+    setState(() {
+      _obatList.removeAt(index);
+    });
+  }
+
+  // Menampilkan dialog untuk menambah obat
+  Future<void> _showAddObatDialog() async {
+    final TextEditingController nameController = TextEditingController();
+    String selectedSchedule = '6 jam sekali'; // Default pilihan pertama
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: const Text("Tambah Obat"),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: nameController,
+                    decoration: const InputDecoration(labelText: "Nama Obat"),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "Pilih Jadwal Minum:",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Column(
+                    children: [
+                      RadioListTile<String>(
+                        value: '6 jam sekali',
+                        groupValue: selectedSchedule,
+                        title: const Text('6 jam sekali'),
+                        onChanged: (value) {
+                          setDialogState(() {
+                            selectedSchedule = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile<String>(
+                        value: '8 jam sekali',
+                        groupValue: selectedSchedule,
+                        title: const Text('8 jam sekali'),
+                        onChanged: (value) {
+                          setDialogState(() {
+                            selectedSchedule = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile<String>(
+                        value: '12 jam sekali',
+                        groupValue: selectedSchedule,
+                        title: const Text('12 jam sekali'),
+                        onChanged: (value) {
+                          setDialogState(() {
+                            selectedSchedule = value!;
+                          });
+                        },
+                      ),
+                      RadioListTile<String>(
+                        value: '24 jam sekali',
+                        groupValue: selectedSchedule,
+                        title: const Text('24 jam sekali'),
+                        onChanged: (value) {
+                          setDialogState(() {
+                            selectedSchedule = value!;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Batal"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (nameController.text.isNotEmpty) {
+                      _addObat(nameController.text, selectedSchedule);
+                      Navigator.of(context).pop();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Nama obat tidak boleh kosong!"),
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text("Tambah"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("List Obat"),
       ),
-      body: obatList.isEmpty
+      body: _obatList.isEmpty
           ? const Center(
               child: Text(
                 "Belum ada obat yang ditambahkan.",
@@ -24,9 +143,9 @@ class ListObatScreen extends StatelessWidget {
               ),
             )
           : ListView.builder(
-              itemCount: obatList.length,
+              itemCount: _obatList.length,
               itemBuilder: (context, index) {
-                final obat = obatList[index];
+                final obat = _obatList[index];
                 return Card(
                   margin: const EdgeInsets.symmetric(
                     horizontal: 10,
@@ -39,8 +158,7 @@ class ListObatScreen extends StatelessWidget {
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () {
-                        // Tambahkan logika untuk menghapus obat
-                        print("Hapus ${obat['name']}");
+                        _deleteObat(index);
                       },
                     ),
                   ),
@@ -48,54 +166,9 @@ class ListObatScreen extends StatelessWidget {
               },
             ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddObatDialog(context);
-        },
+        onPressed: _showAddObatDialog,
         child: const Icon(Icons.add),
       ),
-    );
-  }
-
-  Future<void> _showAddObatDialog(BuildContext context) async {
-    final TextEditingController nameController = TextEditingController();
-    final TextEditingController scheduleController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Tambah Obat"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(labelText: "Nama Obat"),
-              ),
-              TextField(
-                controller: scheduleController,
-                decoration: const InputDecoration(labelText: "Jadwal Minum"),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Batal"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Logika untuk menambahkan obat ke database
-                print("Obat Ditambahkan: ${nameController.text}");
-                Navigator.of(context).pop();
-              },
-              child: const Text("Tambah"),
-            ),
-          ],
-        );
-      },
     );
   }
 }

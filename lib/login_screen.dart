@@ -30,11 +30,20 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Login")),
+      appBar: AppBar(
+        title: const Text("Login"),
+      ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () => _signInWithGoogle(context),
-          child: const Text("Login with Google"),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset('assets/images/google_logo.png', height: 50, width: 50),
+            const SizedBox(height: 20), // Spasi antara gambar dan tombol
+            ElevatedButton(
+              onPressed: () => _signInWithGoogle(context),
+              child: const Text("Login with Google"),
+            ),
+          ],
         ),
       ),
     );

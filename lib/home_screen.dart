@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ingat_obatku/list_obat_screen.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 
 class HomeScreen extends StatelessWidget {
   final User user;
@@ -17,8 +17,7 @@ class HomeScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              Navigator.of(context).pushReplacementNamed('/login');
+              await _handleLogout(context);
             },
           ),
         ],
@@ -30,14 +29,7 @@ class HomeScreen extends StatelessWidget {
           Column(
             children: [
               const SizedBox(height: 20),
-              CircleAvatar(
-                radius: 50,
-                backgroundImage:
-                    user.photoURL != null ? NetworkImage(user.photoURL!) : null,
-                child: user.photoURL == null
-                    ? const Icon(Icons.person, size: 50)
-                    : null,
-              ),
+              _buildProfilePicture(),
               const SizedBox(height: 16),
               Text(
                 "Hello, ${user.displayName ?? "User"}",
@@ -45,7 +37,7 @@ class HomeScreen extends StatelessWidget {
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              Text("Email: ${user.email}"),
+              Text("Email: ${user.email ?? "Unknown"}"),
             ],
           ),
 
@@ -71,14 +63,22 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.alarm,
                   label: "Reminder",
                   onTap: () {
-                    // Navigate to Reminder page
+                    // TODO: Implement navigation to Reminder page
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text("Reminder page is under development")),
+                    );
                   },
                 ),
                 _buildMenuButton(
                   icon: Icons.settings,
                   label: "Settings",
                   onTap: () {
-                    // Navigate to Settings page
+                    // TODO: Implement navigation to Settings page
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text("Settings page is under development")),
+                    );
                   },
                 ),
               ],
@@ -89,7 +89,18 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Helper to build individual buttons
+  /// Builds the user's profile picture or a default icon
+  Widget _buildProfilePicture() {
+    return CircleAvatar(
+      radius: 50,
+      backgroundImage: user.photoURL != null
+          ? CachedNetworkImageProvider(user.photoURL!)
+          : null,
+      child: user.photoURL == null ? const Icon(Icons.person, size: 50) : null,
+    );
+  }
+
+  /// Helper to build individual buttons in the bottom navigation
   Widget _buildMenuButton({
     required IconData icon,
     required String label,
@@ -105,5 +116,17 @@ class HomeScreen extends StatelessWidget {
         Text(label, style: const TextStyle(fontSize: 14)),
       ],
     );
+  }
+
+  /// Handles the logout process and navigates to the login screen
+  Future<void> _handleLogout(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.of(context).pushReplacementNamed('/login');
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Logout failed: $error")),
+      );
+    }
   }
 }
