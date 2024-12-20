@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ingat_obatku/list_obat_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ingat_obatku/reminder_page.dart';
+import 'package:ingat_obatku/setting_page.dart';
 
 class HomeScreen extends StatelessWidget {
   final User user;
@@ -50,7 +52,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 _buildMenuButton(
                   icon: Icons.medication,
-                  label: "List Obat",
+                  label: "Medication List",
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -63,10 +65,9 @@ class HomeScreen extends StatelessWidget {
                   icon: Icons.alarm,
                   label: "Reminder",
                   onTap: () {
-                    // TODO: Implement navigation to Reminder page
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text("Reminder page is under development")),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ReminderPage()),
                     );
                   },
                 ),
@@ -75,9 +76,13 @@ class HomeScreen extends StatelessWidget {
                   label: "Settings",
                   onTap: () {
                     // TODO: Implement navigation to Settings page
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text("Settings page is under development")),
+                    // ScaffoldMessenger.of(context).showSnackBar(
+                    //   const SnackBar(
+                    //       content: Text("Settings page is under development")),
+                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SettingsPage()),
                     );
                   },
                 ),

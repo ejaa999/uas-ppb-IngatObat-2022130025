@@ -10,9 +10,9 @@ class ListObatScreen extends StatefulWidget {
 class _ListObatScreenState extends State<ListObatScreen> {
   // List data obat
   final List<Map<String, String>> _obatList = [
-    {'name': 'Paracetamol', 'schedule': '6 jam sekali'},
-    {'name': 'Vitamin C', 'schedule': '12 jam sekali'},
-    {'name': 'Amoxicillin', 'schedule': '8 jam sekali'},
+    {'name': 'Paracetamol', 'schedule': 'every 6 hours'},
+    // {'name': 'Vitamin C', 'schedule': '12 jam sekali'},
+    {'name': 'Ibuprofen', 'schedule': 'every 8 hours'},
   ];
 
   // Fungsi untuk menambahkan obat
@@ -32,7 +32,7 @@ class _ListObatScreenState extends State<ListObatScreen> {
   // Menampilkan dialog untuk menambah obat
   Future<void> _showAddObatDialog() async {
     final TextEditingController nameController = TextEditingController();
-    String selectedSchedule = '6 jam sekali'; // Default pilihan pertama
+    String selectedSchedule = 'every 6 hours'; // Default pilihan pertama
 
     showDialog(
       context: context,
@@ -40,25 +40,26 @@ class _ListObatScreenState extends State<ListObatScreen> {
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return AlertDialog(
-              title: const Text("Tambah Obat"),
+              title: const Text("Add Medication"),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
                     controller: nameController,
-                    decoration: const InputDecoration(labelText: "Nama Obat"),
+                    decoration:
+                        const InputDecoration(labelText: "Medication Name"),
                   ),
                   const SizedBox(height: 16),
                   const Text(
-                    "Pilih Jadwal Minum:",
+                    "Select Medication Schedule:",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Column(
                     children: [
                       RadioListTile<String>(
-                        value: '6 jam sekali',
+                        value: 'every 6 hours',
                         groupValue: selectedSchedule,
-                        title: const Text('6 jam sekali'),
+                        title: const Text('every 6 hours'),
                         onChanged: (value) {
                           setDialogState(() {
                             selectedSchedule = value!;
@@ -66,9 +67,9 @@ class _ListObatScreenState extends State<ListObatScreen> {
                         },
                       ),
                       RadioListTile<String>(
-                        value: '8 jam sekali',
+                        value: 'every 8 hours',
                         groupValue: selectedSchedule,
-                        title: const Text('8 jam sekali'),
+                        title: const Text('every 8 hours'),
                         onChanged: (value) {
                           setDialogState(() {
                             selectedSchedule = value!;
@@ -76,9 +77,9 @@ class _ListObatScreenState extends State<ListObatScreen> {
                         },
                       ),
                       RadioListTile<String>(
-                        value: '12 jam sekali',
+                        value: 'every 12 hours',
                         groupValue: selectedSchedule,
-                        title: const Text('12 jam sekali'),
+                        title: const Text('every 12 hours'),
                         onChanged: (value) {
                           setDialogState(() {
                             selectedSchedule = value!;
@@ -86,9 +87,9 @@ class _ListObatScreenState extends State<ListObatScreen> {
                         },
                       ),
                       RadioListTile<String>(
-                        value: '24 jam sekali',
+                        value: 'every 24 hours',
                         groupValue: selectedSchedule,
-                        title: const Text('24 jam sekali'),
+                        title: const Text('every 24 hours'),
                         onChanged: (value) {
                           setDialogState(() {
                             selectedSchedule = value!;
@@ -104,7 +105,7 @@ class _ListObatScreenState extends State<ListObatScreen> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text("Batal"),
+                  child: const Text("Cancel"),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -114,7 +115,7 @@ class _ListObatScreenState extends State<ListObatScreen> {
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text("Nama obat tidak boleh kosong!"),
+                          content: Text("Medication name cannot be empty!"),
                         ),
                       );
                     }
@@ -133,12 +134,12 @@ class _ListObatScreenState extends State<ListObatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("List Obat"),
+        title: const Text("Medication List"),
       ),
       body: _obatList.isEmpty
           ? const Center(
               child: Text(
-                "Belum ada obat yang ditambahkan.",
+                "No medication has been added yet.",
                 style: TextStyle(fontSize: 16),
               ),
             )
@@ -154,7 +155,7 @@ class _ListObatScreenState extends State<ListObatScreen> {
                   child: ListTile(
                     leading: const Icon(Icons.medication),
                     title: Text(obat['name']!),
-                    subtitle: Text("Jadwal: ${obat['schedule']}"),
+                    subtitle: Text("Schedule: ${obat['schedule']}"),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete, color: Colors.red),
                       onPressed: () {
